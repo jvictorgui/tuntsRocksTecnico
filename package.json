@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "googleapis": "^133.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  },
+  "name": "tuntsrockstecnico",
+  "description": "",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jvictorgui/tuntsRocksTecnico.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jvictorgui/tuntsRocksTecnico/issues"
+  },
+  "homepage": "https://github.com/jvictorgui/tuntsRocksTecnico#readme"
+}
