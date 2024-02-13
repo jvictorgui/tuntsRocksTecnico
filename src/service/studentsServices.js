@@ -24,6 +24,8 @@ const allStudentsData = async () => {
   return { auth, spreadsheetId, client, googleSheets, getRows };
 };
 
+// calculates the final grade and the status of the students
+
 const statusCalculator = (p1, p2, p3, absences) => {
   const finalGrade = Math.ceil((Number(p1) + Number(p2) + Number(p3)) / 3);
 
@@ -47,6 +49,7 @@ const statusCalculator = (p1, p2, p3, absences) => {
   return { finalGrade, naf };
 };
 
+// maps the students data and fills the spreadsheet with the status and final grade
 const mappedStudents = async () => {
   try {
     const { getRows, auth, spreadsheetId, googleSheets } = await allStudentsData();
@@ -88,7 +91,7 @@ const mappedStudents = async () => {
   } 
 };
 
-// gets all the students from the spreadsheet
+// sends the students data to the controller
 const getAllStudents = async () => {
   try {
     const students = await mappedStudents();
@@ -103,4 +106,6 @@ const getAllStudents = async () => {
 
 module.exports = {
   getAllStudents,
+  statusCalculator,
+  mappedStudents,
 };
