@@ -20,7 +20,8 @@
     "test": "npx jest",
     "test:coverage": "jest --coverage",
     "dev": "nodemon .",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "start": "node ."
   },
   "repository": {
     "type": "git",
