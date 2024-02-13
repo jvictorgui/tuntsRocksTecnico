@@ -1,4 +1,4 @@
-const { statusCalculator, mappedStudents, getAllStudents } = require('../service/studentsServices');
+const { statusCalculator, mappedStudents } = require('../service/studentsServices');
 const { mockedStudents } = require('./mockStudents');
 
 describe('Students Service Tests', function () {
