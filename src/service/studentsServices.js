@@ -1,31 +1,27 @@
 const { google } = require('googleapis');
 
 // does the request to google sheets API and retrieves the info for all students
-const allStudentsData = async (studentStatus,studentFinalGrade) => {
+const allStudentsData = async () => {
   const auth = new google.auth.GoogleAuth({
     keyFile: 'credentials.json',
     scopes: 'https://www.googleapis.com/auth/spreadsheets',
   });
+  
   const spreadsheetId = '1U1b_4SezsFwMLbEgEtVPwGjCEUWbIqkOKMRqpHrUSGs';
   const client = await auth.getClient();
   const googleSheets = google.sheets({ version: 'v4', auth: client });
-  const values = [studentStatus, studentFinalGrade]
+  await googleSheets.spreadsheets.values.clear({
+    auth,
+    spreadsheetId,
+    range: 'engenharia_de_software!G4:H',
+  });
   const getRows = await googleSheets.spreadsheets.values.get({
     auth,
     spreadsheetId,
     range: 'engenharia_de_software',
   });
-    const fillColumns = await googleSheets.spreadsheets.values.append({
-      auth,
-      spreadsheetId,
-      range: 'engenharia_de_software!G4:H',
-      valueInputOption: 'USER_ENTERED', 
-      resource: {
-      values,
-      },
-    })
 
-  return { auth, spreadsheetId, client, googleSheets, getRows, fillColumns };
+  return { auth, spreadsheetId, client, googleSheets, getRows };
 };
 
 const statusCalculator = (p1, p2, p3, absences) => {
@@ -51,10 +47,9 @@ const statusCalculator = (p1, p2, p3, absences) => {
   return { finalGrade, naf };
 };
 
-
 const mappedStudents = async () => {
   try {
-    const { getRows, fillColumns, auth, spreadsheetId, client, googleSheets, } = await allStudentsData();
+    const { getRows, auth, spreadsheetId, googleSheets } = await allStudentsData();
 
     const filteredStuds = getRows.data.values.slice(3).map((students) => {
       const studentsResults = statusCalculator(students[3], students[4], students[5], students[2]);
@@ -70,9 +65,8 @@ const mappedStudents = async () => {
         notaAprovaçãoFinal: studentsResults.message === 'Exame Final' ? studentsResults.grade : 0,
       };
     });
-
     
-    const fillData = filteredStuds.map(student => [
+    const fillData = filteredStuds.map((student) => [
       student.situação,
       student.notaAprovaçãoFinal,
     ]);
@@ -80,7 +74,7 @@ const mappedStudents = async () => {
     await googleSheets.spreadsheets.values.append({
       auth,
       spreadsheetId,
-      range: 'engenharia_de_software!G4:H',
+      range: 'engenharia_de_software!G4:H4',
       valueInputOption: 'USER_ENTERED',
       resource: {
         values: fillData,
@@ -91,7 +85,8 @@ const mappedStudents = async () => {
   } catch (error) {
     console.error('Error mapping and filling students data:', error);
     throw error; 
-};}
+  } 
+};
 
 // gets all the students from the spreadsheet
 const getAllStudents = async () => {
@@ -105,7 +100,6 @@ const getAllStudents = async () => {
     return { status: 500, data: { message: 'Internal Server Error' } };
   }
 };
-
 
 module.exports = {
   getAllStudents,

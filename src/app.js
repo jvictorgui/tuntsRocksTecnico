@@ -1,6 +1,5 @@
 const express = require('express');
-const { google } = require('googleapis');
-const { getAllStudentsController, createGradesController } = require('./controller/studentsController');
+const { getAllStudentsController } = require('./controller/studentsController');
 
 const app = express();
 
@@ -8,6 +7,5 @@ const app = express();
 app.get('/', async (_request, response) => {
   await getAllStudentsController(_request, response);
 });
-
 
 module.exports = app;
